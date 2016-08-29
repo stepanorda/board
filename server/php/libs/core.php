@@ -458,7 +458,7 @@ function ldapAuthenticate($p_user_id, $p_password)
             $t_password = str_rot13($ldap_bind_passwd_decode);
         }
         if (!empty($t_binddn) && !empty($t_password)) {
-            $t_br = @ldap_bind($t_ds, $t_binddn, $t_password);
+            $t_br = @ldap_bind($t_ds, $t_binddn, utf8_decode($t_password));
         } else {
             // Either the Bind DN or the Password are empty, so attempt an anonymous bind.
             $t_br = @ldap_bind($t_ds);
@@ -481,7 +481,7 @@ function ldapAuthenticate($p_user_id, $p_password)
         for ($i = 0; $i < $t_info['count']; $i++) {
             $t_dn = $t_info[$i]['dn'];
             // Attempt to bind with the DN and password
-            if (@ldap_bind($t_ds, $t_dn, $p_password)) {
+            if (@ldap_bind($t_ds, $t_dn, utf8_decode($p_password))) {
                 $user['User']['is_password_matched'] = true;
                 if (isset($t_info[$i]['name'])) {
                     $user['User']['first_name'] = $t_info[$i]['name'][0];
